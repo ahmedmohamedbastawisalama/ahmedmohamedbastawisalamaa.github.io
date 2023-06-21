@@ -1,0 +1,42 @@
+<?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+    use HasRoles;
+
+    /*** The attributes that are mass assignable.***
+     * @var array
+     */
+
+    protected $fillable = ['name', 'email', 'password', 'roles_name', 'status' ,'rate'];
+    /*** The attributes that should be hidden for arrays.**
+     * @var array
+     */
+    protected $hidden = ['password', 'remember_token',];
+    /*** The attributes that should be cast to native types.**
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'roles_name' => 'array',
+
+        ];
+
+    public function Card()
+    {
+        return $this->hasMany(Card::class, 'agent_id');
+    }
+
+    public function Card_plus()
+    {
+        return $this->hasMany(card_plus::class, 'agent_id');
+    }
+}
